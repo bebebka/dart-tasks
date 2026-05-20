@@ -1,0 +1,250 @@
+import 'package:flutter/material.dart';
+
+void main() => runApp(const MyApp());
+
+class MyApp extends StatelessWidget {
+  const MyApp({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      debugShowCheckedModeBanner: false,
+      title: 'Flutter PR Task 1-1-2',
+      theme: ThemeData(
+        colorScheme: ColorScheme.fromSeed(seedColor: Colors.redAccent),
+        useMaterial3: true,
+      ),
+      home: const HomePage(),
+    );
+  }
+}
+
+class HomePage extends StatelessWidget {
+  const HomePage({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        elevation: 0,
+        backgroundColor: Colors.black,
+        leading: Builder(
+          builder: (context) => IconButton(
+            onPressed: () {
+              Scaffold.of(context).openDrawer();
+            },
+            icon: const Icon(Icons.notes, color: Colors.white),
+          ),
+        ),
+        title: const Text(
+          'NP-1-1-2',
+          style: TextStyle(color: Colors.white),
+        ),
+        centerTitle: true,
+        actions: const [
+          Icon(Icons.info_outline, color: Colors.white),
+          SizedBox(width: 15),
+          Icon(Icons.games_outlined, color: Colors.white),
+          SizedBox(width: 10),
+        ],
+      ),
+      drawer: const MainDrawer(),
+      body: SingleChildScrollView(
+        child: Container(
+          color: Colors.grey.shade300, // Просто серый фон вместо картинки
+          child: const Column(
+            children: [
+              HomeMainContent(
+                imageUrlPathOne: 'https://cdn.pixabay.com/photo/2023/01/10/18/52/cat-7710081_640.jpg',
+                imageUrlPathTwo: 'https://cdn.pixabay.com/photo/2017/06/21/08/38/dog-2426854_640.jpg',
+              ),
+              HomeMainContent(
+                imageUrlPathOne: 'https://cdn.pixabay.com/photo/2024/03/12/18/42/ai-generated-8630121_640.jpg',
+                imageUrlPathTwo: 'https://cdn.pixabay.com/photo/2023/08/18/09/46/ai-generated-8198298_640.jpg',
+              ),
+              HomeMainContent(
+                imageUrlPathOne: 'https://cdn.pixabay.com/photo/2024/02/20/18/04/ai-generated-8586716_640.jpg',
+                imageUrlPathTwo: 'https://cdn.pixabay.com/photo/2023/05/20/18/11/ai-generated-8007120_640.jpg',
+              ),
+              HomeMainContent(
+                imageUrlPathOne: 'https://cdn.pixabay.com/photo/2024/02/20/15/01/ai-generated-8586353_640.jpg',
+                imageUrlPathTwo: 'https://cdn.pixabay.com/photo/2024/04/07/19/02/ai-generated-8682919_640.jpg',
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class HomeMainContent extends StatelessWidget {
+  final String imageUrlPathOne;
+  final String imageUrlPathTwo;
+
+  const HomeMainContent({
+    super.key,
+    required this.imageUrlPathOne,
+    required this.imageUrlPathTwo,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.all(8.0),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Card(
+            elevation: 50,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(20),
+            ),
+            shadowColor: Colors.black,
+            color: Colors.greenAccent[100],
+            child: Image.network(
+              imageUrlPathOne,
+              width: 180,
+              height: 180,
+              fit: BoxFit.cover,
+              errorBuilder: (context, error, stackTrace) {
+                return Container(
+                  width: 180,
+                  height: 180,
+                  color: Colors.grey,
+                  child: const Icon(Icons.broken_image, size: 50),
+                );
+              },
+            ),
+          ),
+          Card(
+            elevation: 50,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(20),
+            ),
+            shadowColor: Colors.black,
+            color: Colors.greenAccent[100],
+            child: Image.network(
+              imageUrlPathTwo,
+              width: 180,
+              height: 180,
+              fit: BoxFit.cover,
+              errorBuilder: (context, error, stackTrace) {
+                return Container(
+                  width: 180,
+                  height: 180,
+                  color: Colors.grey,
+                  child: const Icon(Icons.broken_image, size: 50),
+                );
+              },
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class MainDrawer extends StatelessWidget {
+  const MainDrawer({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Drawer(
+      child: ListView(
+        padding: EdgeInsets.zero,
+        children: [
+          const UserAccountsDrawerHeader(
+            accountName: Text('Константин'),
+            accountEmail: Text('kostyantin@mail.ru'),
+            currentAccountPicture: CircleAvatar(
+              backgroundColor: Colors.white,
+              child: Icon(Icons.person, color: Colors.redAccent, size: 40),
+            ),
+            decoration: BoxDecoration(
+              color: Colors.redAccent,
+            ),
+          ),
+          ListTile(
+            leading: const Icon(Icons.favorite, color: Colors.redAccent),
+            title: const Text('Избранное'),
+            onTap: () {},
+          ),
+          ListTile(
+            leading: const Icon(Icons.people, color: Colors.redAccent),
+            title: const Text('Друзья'),
+            trailing: Container(
+              width: 24,
+              height: 24,
+              decoration: const BoxDecoration(
+                color: Colors.red,
+                shape: BoxShape.circle,
+              ),
+              child: const Center(
+                child: Text(
+                  '7',
+                  style: TextStyle(color: Colors.white, fontSize: 12),
+                ),
+              ),
+            ),
+            onTap: () {},
+          ),
+          ListTile(
+            leading: const Icon(Icons.share_location, color: Colors.redAccent),
+            title: const Text('Места'),
+            onTap: () {},
+          ),
+          ListTile(
+            leading: const Icon(Icons.notifications, color: Colors.redAccent),
+            title: const Text('Уведомления'),
+            trailing: Container(
+              width: 24,
+              height: 24,
+              decoration: const BoxDecoration(
+                color: Colors.red,
+                shape: BoxShape.circle,
+              ),
+              child: const Center(
+                child: Text(
+                  '5',
+                  style: TextStyle(color: Colors.white, fontSize: 12),
+                ),
+              ),
+            ),
+            onTap: () {},
+          ),
+          ListTile(
+            leading: const Icon(Icons.settings, color: Colors.redAccent),
+            title: const Text('Настройки'),
+            trailing: Container(
+              width: 24,
+              height: 24,
+              decoration: const BoxDecoration(
+                color: Colors.red,
+                shape: BoxShape.circle,
+              ),
+              child: const Center(
+                child: Text(
+                  '4',
+                  style: TextStyle(color: Colors.white, fontSize: 12),
+                ),
+              ),
+            ),
+            onTap: () {},
+          ),
+          ListTile(
+            leading: const Icon(Icons.photo, color: Colors.redAccent),
+            title: const Text('Фотографии'),
+            onTap: () {},
+          ),
+          const Divider(),
+          ListTile(
+            leading: const Icon(Icons.exit_to_app, color: Colors.redAccent),
+            title: const Text('Выйти'),
+            onTap: () {},
+          ),
+        ],
+      ),
+    );
+  }
+}
