@@ -1,0 +1,173 @@
+import 'package:flutter/material.dart';
+
+void main() {
+  runApp(const MyApp());
+}
+
+class MyApp extends StatelessWidget {
+  const MyApp({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      title: 'Калькулятор депозита',
+      theme: ThemeData(
+        primarySwatch: Colors.red,
+        useMaterial3: true,
+      ),
+      home: const DepositCalculator(),
+    );
+  }
+}
+
+class DepositCalculator extends StatefulWidget {
+  const DepositCalculator({super.key});
+
+  @override
+  State<DepositCalculator> createState() => _DepositCalculatorState();
+}
+
+class _DepositCalculatorState extends State<DepositCalculator> {
+  final TextEditingController amountController = TextEditingController();
+  final TextEditingController rateController = TextEditingController();
+  final TextEditingController monthController = TextEditingController();
+  
+  double interest = 0.0;
+  double totalResult = 0.0;
+  bool isCalculated = false;
+
+  void calculate() {
+    if (amountController.text.isEmpty ||
+        rateController.text.isEmpty ||
+        monthController.text.isEmpty) {
+      return;
+    }
+    
+    try {
+      double amount = double.parse(amountController.text);
+      double rate = double.parse(rateController.text);
+      int months = int.parse(monthController.text);
+      
+      double calculatedInterest = (rate / 100 / 12) * months * amount;
+      
+      setState(() {
+        interest = calculatedInterest;
+        totalResult = amount + interest;
+        isCalculated = true;
+      });
+    } catch (e) {
+      // Ошибка ввода
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('Практическая работа № 1 - 1 - 1'),
+        backgroundColor: Colors.red,
+      ),
+      body: Container(
+        color: Colors.grey.shade200,
+        child: Padding(
+          padding: const EdgeInsets.all(20.0),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              // Поле "Депозит"
+              const Text('Депозит', style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
+              const SizedBox(height: 5),
+              TextField(
+                controller: amountController,
+                keyboardType: TextInputType.number,
+                decoration: InputDecoration(
+                  hintText: 'Введите сумму',
+                  border: OutlineInputBorder(borderRadius: BorderRadius.circular(15)),
+                  filled: true,
+                  fillColor: Colors.white,
+                ),
+              ),
+              const SizedBox(height: 20),
+              
+              // Поле "Процент"
+              const Text('Процентная ставка (%)', style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
+              const SizedBox(height: 5),
+              TextField(
+                controller: rateController,
+                keyboardType: TextInputType.number,
+                decoration: InputDecoration(
+                  hintText: 'Введите процент',
+                  border: OutlineInputBorder(borderRadius: BorderRadius.circular(15)),
+                  filled: true,
+                  fillColor: Colors.white,
+                ),
+              ),
+              const SizedBox(height: 20),
+              
+              // Поле "Месяцев"
+              const Text('Срок (месяцев)', style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
+              const SizedBox(height: 5),
+              TextField(
+                controller: monthController,
+                keyboardType: TextInputType.number,
+                decoration: InputDecoration(
+                  hintText: '1-12',
+                  border: OutlineInputBorder(borderRadius: BorderRadius.circular(15)),
+                  filled: true,
+                  fillColor: Colors.white,
+                ),
+              ),
+              const SizedBox(height: 30),
+              
+              // Кнопка "Рассчитать"
+              ElevatedButton(
+                onPressed: calculate,
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: Colors.red,
+                  padding: const EdgeInsets.symmetric(vertical: 15),
+                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
+                ),
+                child: const Text(
+                  'Рассчитать',
+                  style: TextStyle(fontSize: 20, color: Colors.white),
+                ),
+              ),
+              
+              const SizedBox(height: 30),
+              
+              // Результат
+              if (isCalculated) ...[
+                Container(
+                  padding: const EdgeInsets.all(15),
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.circular(15),
+                    border: Border.all(color: Colors.grey.shade300),
+                  ),
+                  child: Column(
+                    children: [
+                      Text(
+                        'Результат:',
+                        style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: Colors.grey.shade700),
+                      ),
+                      const SizedBox(height: 10),
+                      Text(
+                        '% : ${interest.toStringAsFixed(2)} ₽',
+                        style: const TextStyle(fontSize: 24, fontWeight: FontWeight.bold, color: Colors.green),
+                      ),
+                      const SizedBox(height: 10),
+                      Text(
+                        'Итого : ${totalResult.toStringAsFixed(2)} ₽',
+                        style: const TextStyle(fontSize: 24, fontWeight: FontWeight.bold, color: Colors.blue),
+                      ),
+                    ],
+                  ),
+                ),
+              ],
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+}
